@@ -72,12 +72,16 @@ pipeline {
         always {
             echo 'Publishing test reports...'
             
-            // Publish Cucumber reports
-            cucumber buildStatus: 'UNSTABLE',
-                    reportTitle: 'CRM Automation Test Report',
-                    fileIncludePattern: '**/cucumber.json',
-                    sortingMethod: 'ALPHABETICAL',
-                    trendsLimit: 100
+            // Publish HTML reports
+            publishHTML([
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'target',
+                reportFiles: 'cucumber-reports.html',
+                reportName: 'CRM Automation Test Report',
+                reportTitles: 'Cucumber Test Report'
+            ])
             
             // Publish JUnit test results
             junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'

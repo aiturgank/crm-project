@@ -33,9 +33,15 @@ node {
         
         stage('Report') {
             echo 'Publishing reports...'
-            cucumber buildStatus: 'UNSTABLE',
-                    reportTitle: 'CRM Test Report',
-                    fileIncludePattern: '**/cucumber.json'
+            publishHTML([
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'target',
+                reportFiles: 'cucumber-reports.html',
+                reportName: 'CRM Test Report',
+                reportTitles: 'Cucumber Test Report'
+            ])
             junit '**/target/surefire-reports/*.xml'
             archiveArtifacts artifacts: '**/target/cucumber-reports.html', allowEmptyArchive: true
         }
