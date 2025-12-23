@@ -43,7 +43,7 @@ pipeline {
             }
             steps {
                 echo 'Running Smoke Tests...'
-                sh 'mvn test -Dcucumber.filter.tags="@smoke"'
+                sh 'mvn test -Dcucumber.filter.tags="@smoke" -Dbrowser=chrome-headless'
             }
         }
         
@@ -53,7 +53,7 @@ pipeline {
             }
             steps {
                 echo 'Running Regression Tests...'
-                sh 'mvn test -Dcucumber.filter.tags="@regression"'
+                sh 'mvn test -Dcucumber.filter.tags="@regression" -Dbrowser=chrome-headless'
             }
         }
         
@@ -63,7 +63,7 @@ pipeline {
             }
             steps {
                 echo 'Running All Tests...'
-                sh 'mvn test'
+                sh 'mvn test -Dbrowser=chrome-headless'
             }
         }
     }
