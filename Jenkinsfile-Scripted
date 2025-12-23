@@ -1,0 +1,53 @@
+// Scripted Pipeline (Alternative approach)
+properties([
+    pipelineTriggers([cron('0 22 * * *')]), // Daily at 10 PM
+    parameters([
+        choice(name: 'TEST_SUITE', choices: ['smoke', 'regression', 'all'], description: 'Select test suite'),
+        string(name: 'BROWSER', defaultValue: 'chrome', description: 'Browser type')
+    ])
+])
+
+node {
+    try {
+        stage('Checkout') {
+            echo 'Checking out code...'
+            checkout scm
+        }
+        
+        stage('Build') {
+            echo 'Building project...'
+            sh 'mvn clean compile'
+        }
+        
+        stage('Test') {
+            echo "Running ${params.TEST_SUITE} tests..."
+            
+            if (params.TEST_SUITE == 'smoke') {
+                sh 'mvn test -Dcucumber.filter.tags="@smoke"'
+            } else if (params.TEST_SUITE == 'regression') {
+                sh 'mvn test -Dcucumber.filter.tags="@regression"'
+            } else {
+                sh 'mvn test'
+            }
+        }
+        
+        stage('Report') {
+            echo 'Publishing reports...'
+            cucumber buildStatus: 'UNSTABLE',
+                    reportTitle: 'CRM Test Report',
+                    fileIncludePattern: '**/cucumber.json'
+            junit '**/target/surefire-reports/*.xml'
+            archiveArtifacts artifacts: '**/target/cucumber-reports.html', allowEmptyArchive: true
+        }
+        
+        currentBuild.result = 'SUCCESS'
+        
+    } catch (Exception e) {
+        currentBuild.result = 'FAILURE'
+        throw e
+    } finally {
+        // Send notifications
+        echo "Build finished with status: ${currentBuild.result}"
+        cleanWs()
+    }
+}
