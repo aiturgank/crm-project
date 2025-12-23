@@ -1,7 +1,7 @@
 Feature: Functions on Company Structure in Employee page
   User Story: As a user, I should be able to use functions on Company Structure under Employee menu.
 
-
+  @smoke
   @B36T5-322
   Scenario Outline: Verify that the Company Structure is visible for all user types
     When user logs in as "<userType>"
@@ -14,7 +14,7 @@ Feature: Functions on Company Structure in Employee page
       | marketing |
 
 
-   @B36T5-322
+  @B36T5-322
   Scenario Outline: Verify that the HR user can add a department from the Company Structure
     When user logs in as "<userType>"
     When the user navigates to the "Employees" page

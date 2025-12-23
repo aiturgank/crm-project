@@ -2,7 +2,7 @@
 
 Feature: As a user, I should be able to logout.
 
-
+  @smoke
   Scenario Outline: Verify user can log out from the app after clicking the "Log out" button
     When user logs in as "<userType>"
     Then user clicks on the profile dropdown

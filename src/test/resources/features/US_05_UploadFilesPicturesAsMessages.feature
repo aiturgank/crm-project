@@ -4,7 +4,7 @@ Feature: User uploads files and pictures as messages
 
   As a user, I should be able to upload files and pictures as messages
 
-
+  @smoke
   Scenario Outline:User uploads supported file types
     When user logs in as "<userType>"
     And the user is on the message input screen

@@ -1,7 +1,7 @@
 @wip_anis
 Feature: As a user, I should be able to access the Employees page
 
-
+  @smoke
   Scenario Outline: Checking employee page modules as hr login
     When user logs in as "<userType>"
     When user clicks on Employees page
